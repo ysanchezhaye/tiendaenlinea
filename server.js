@@ -2,6 +2,8 @@ const express = require('express')
 const app = express()
 const hbs = require('hbs')
 let nodemailer = require('nodemailer')
+const dotenv = require('dotenv');
+dotenv.config();
 
 require('./helpers/helper'); //es como insertar un pedazo de codigo almacenado en otro archivo
 const datos = require('./productos.json')
@@ -43,7 +45,9 @@ app.post('/contacto', function (req, res) {
         from: data.nombre, //propiedades del objeto del formulario (mismos nombres)
         to: 'galahaye2@gmail.com',
         subject: data.asunto,
-        text: data.mensaje
+        html: `<h2>El siguiente mensaje ha llegado de la web</h2>
+       <p>${data.mensaje}</p>
+        `
     }
 
     // Enviamos el mail
@@ -52,18 +56,22 @@ app.post('/contacto', function (req, res) {
             console.log(error)
             res.status(500, error.message)
             res.status(500).render('contacto', {
-                mensaje: ` <div class= "text-center alert alert-danger" role="alert">Ha ocurrido el siguiente error: ${error.message}</div>`
+                mensaje: ` Ha ocurrido el siguiente error: ${error.message}`,
+                mostrar: true,
+                clase: 'danger'
             })
-        }else {
+        } else {
             console.log("E-mail enviado")
-            res.status(200).render('contacto',{
-                mensaje:`<div class= "text-center alert alert-success" role="success">Tu e-mail ha sido enviado correctamente</div>` 
+            res.status(200).render('contacto', {
+                mensaje: `Tu e-mail ha sido enviado correctamente`,
+                mostrar: true,
+                clase: 'success'
             })
         }
     })
 })
 
-
 app.listen(3000, function () {
     console.log("El servidor está online en puerto 3000")
 })
+
