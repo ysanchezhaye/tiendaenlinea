@@ -75,16 +75,13 @@
     <section class="page-wrapper">
         <div class="contact-section">
             <div class="container">
-                {{#if mostrar}}
-
-                <div class="text-center alert alert-{{clase}}" role="alert">{{mensaje}}</div>
-              
+                {{#if mensaje}}
+                {{mensaje}}
                 {{/if}}
- 
                 <div class="row">
                     <!-- Contact Form -->
-                    <form action="/contacto" method="post" class="row mb-3 g-3 needs-validation col-md-6 mx-auto"
-                        id="contact-form" novalidate>
+                    <form action="/contacto" method="post"
+                        class="row mb-3 g-3 needs-validation col-md-6 mx-auto" id="contact-form" novalidate>
                         <div class="col-md-4">
                             <label for="nombre" class="form-label">Nombre</label>
                             <input type="text" class="form-control" id="nombre" placeholder="Escribe tu nombre"
