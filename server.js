@@ -4,6 +4,7 @@ const hbs = require('hbs')
 let nodemailer = require('nodemailer')
 var path = require('path');
 const dotenv = require('dotenv');
+dotenv.config();
 
 require('./helpers/helper'); //es como insertar un pedazo de codigo almacenado en otro archivo
 const datos = require('./productos.json')
@@ -108,6 +109,7 @@ app.get('/login', function(req,res){
 app.use(function(req,res){
     res.status(404).render('404')
 });
+
 
 app.listen(3000, function () {
     console.log("El servidor está online en puerto 3000")
