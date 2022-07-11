@@ -2,8 +2,8 @@ const express = require('express')
 const app = express()
 const hbs = require('hbs')
 let nodemailer = require('nodemailer')
+var path = require('path');
 const dotenv = require('dotenv');
-dotenv.config();
 
 require('./helpers/helper'); //es como insertar un pedazo de codigo almacenado en otro archivo
 const datos = require('./productos.json')
@@ -13,9 +13,18 @@ app.use(express.json());
 app.use(express.urlencoded({
     extended: false
 }));
+app.use(express.static('public')); //middleware
 
+//Hbs
 app.set('view engine', 'hbs');
+app.set('views', [
+    path.join('./views/front'),
+    path.join('./views/back'),
+    path.join('./views'),
+]);
+hbs.registerPartials(__dirname + '/views/partials');  
 
+//=== FRONT ===
 // ruta raíz
 app.get('/', function (req, res) {
     //console.log(datos[0].data)
@@ -24,7 +33,6 @@ app.get('/', function (req, res) {
     })
 })
 
-// contacto
 app.get('/contacto', function (req, res) {
     res.render('contacto')
 })
@@ -70,6 +78,36 @@ app.post('/contacto', function (req, res) {
         }
     })
 })
+
+app.get('/como-comprar', function(req,res){
+    res.render('como-comprar')
+})
+app.get('/detalle-producto', function(req,res){
+    res.render('detalle-producto')
+})
+app.get('/sobre-nosotros', function(req,res){
+    res.render('sobre-nosotros')
+})
+
+// === ADMIN ===
+
+app.get('/admin', function(req,res){
+    res.render('admin')
+})
+app.get('/agregar-producto', function(req,res){
+    res.render('agregar-producto')
+})
+app.get('/editar-producto', function(req,res){
+    res.render('editar-producto')
+})
+app.get('/login', function(req,res){
+    res.render('login')
+})
+
+//  404 - no encontrado
+app.use(function(req,res){
+    res.status(404).render('404')
+});
 
 app.listen(3000, function () {
     console.log("El servidor está online en puerto 3000")
