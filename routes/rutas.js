@@ -1,93 +1,48 @@
-
-let nodemailer = require('nodemailer')
-const datos = require('../productos.json')
 const { Router } = require('express')
 const router = Router()
-const dotenv = require('dotenv');
 
-dotenv.config();
+//IMPORTO
+const { 
+    inicioGET,
+    contactoGET,
+    contactoPOST,
+    comoComprarGET,
+    detalleProductoGET,
+    sobreNosotrosGET
+} = require('../controllers/front.ctrl')
 
-//const { Router } = require('express');
-//const router = Router()
-
-//=== FRONT ===
+// === FRONT ====
 // ruta raíz
-router.get('/', function (req, res) {
-    //console.log(datos[0].data)
-    res.render('index', {
-        productos: datos[0].data
-    })
-})
+router.get('/', inicioGET)
 
-router.get('/contacto', function (req, res) {
-    res.render('contacto')
-})
+// contacto
+router.get('/contacto', contactoGET)
 
-router.post('/contacto', function (req, res) {
-    // 1. Definir el transportador
-    let transporter = nodemailer.createTransport({
-        service: 'Gmail',
-        auth: {
-            user: process.env.EMAIL_USER,
-            pass: process.env.EMAIL_PASS
-        }
-    })
-    // 2. Definimos el cuerpo de mail
-    console.log("BODY: ", req.body)
-    let data = req.body //lo que va a obtener del formulario
-    let mailOptions = {
-        from: data.nombre, //propiedades del objeto del formulario (mismos nombres)
-        to: 'galahaye2@gmail.com',
-        subject: data.asunto,
-        html: `<h2>El siguiente mensaje ha llegado de la web</h2>
-       <p>${data.mensaje}</p>
-        `
-    }
+router.post('/contacto', contactoPOST)
 
-    // Enviamos el mail
-    transporter.sendMail(mailOptions, function (error, info) {
-        if (error) {
-            console.log(error)
-            res.status(500, error.message)
-            res.status(500).render('contacto', {
-                mensaje: ` Ha ocurrido el siguiente error: ${error.message}`,
-                mostrar: true,
-                clase: 'danger'
-            })
-        } else {
-            console.log("E-mail enviado")
-            res.status(200).render('contacto', {
-                mensaje: `Tu e-mail ha sido enviado correctamente`,
-                mostrar: true,
-                clase: 'success'
-            })
-        }
-    })
-})
+router.get('/como-comprar', comoComprarGET)
 
-router.get('/como-comprar', function(req,res){
-    res.render('como-comprar')
-})
-router.get('/detalle-producto', function(req,res){
-    res.render('detalle-producto')
-})
-router.get('/sobre-nosotros', function(req,res){
-    res.render('sobre-nosotros')
-})
+router.get('/detalle-producto', detalleProductoGET)
+
+router.get('/sobre-nosotros', sobreNosotrosGET)
 
 // === ADMIN ===
 
-router.get('/admin', function(req,res){
-    res.render('admin')
-})
-router.get('/agregar-producto', function(req,res){
-    res.render('agregar-producto')
-})
-router.get('/editar-producto', function(req,res){
-    res.render('editar-producto')
-})
-router.get('/login', function(req,res){
-    res.render('login')
-})
+const {
+    adminGET,
+    agregarProductoGET,
+    editarProductoGET,
+    loginGET
+}= require('../controllers/back.ctrl')
 
-module.exports =  router
+router.get('/admin',adminGET )
+
+router.get('/agregar-producto', agregarProductoGET)
+
+router.get('/editar-producto', editarProductoGET)
+
+router.get('/login', loginGET)
+
+
+module.exports = router
+
