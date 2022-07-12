@@ -1,13 +1,18 @@
 let nodemailer = require('nodemailer');
-const datos = require('../productos.json')
-const dotenv = require('dotenv');
-
+let db = require('../db')
+//const datos = require('../productos.json')
+const dotenv = require('dotenv');    
 dotenv.config();
 
 const inicioGET = function (req, res) {
-    //console.log(datos[0].data)
-    res.render('index', {
-        productos: datos[0].data
+
+    let sql = "SELECT * FROM Productos"
+    db.query(sql, function(error, data) {
+        if (error) res.send(`Ocurrió un error ${error.code}`)
+        res.render('index', {  
+            titulo: "Mi emprendimiento", 
+            productos: data
+        })
     })
 }
 
@@ -18,19 +23,18 @@ const contactoGET = function (req, res) {
 const contactoPOST = function(req, res) {
     // 1. Definir el transportador
     let transporter = nodemailer.createTransport({
-        host: "smtp.mailtrap.io",
-        port: 2525,
+        service: 'Gmail',
         auth: {
-          user: "9e67f1cd60d6f3",
-          pass: "086c522eabf980"
+            user: process.env.EMAIL_USER,
+            pass: process.env.EMAIL_PASS
         }
-    });
+    })
     // 2. Definimos el cuerpo de mail
     console.log("BODY: ", req.body)
     let data = req.body
     let mailOptions = {
         from: data.nombre,
-        to: 'santiago.acosta@bue.edu.ar',
+        to: 'galahaye2@gmail.com',
         subject: data.asunto,
         html: `
             <h2>El siguiente mensaje ha llegado de la web</h2>

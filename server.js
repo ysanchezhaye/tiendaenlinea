@@ -2,8 +2,8 @@ const express = require('express')
 const app = express()
 const hbs = require('hbs')
 var path = require('path');
-
 require('./helpers/helper'); //es como insertar un pedazo de codigo almacenado en otro archivo
+
 
 // Para que tome los datos de los formularios (middleware)
 app.use(express.json());
