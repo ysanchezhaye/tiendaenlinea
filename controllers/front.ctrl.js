@@ -67,8 +67,26 @@ const comoComprarGET = function(req,res) {
     res.render('como-comprar')
 }
 
-const detalleProductoGET =  function(req,res) {
-    res.render('detalle-producto')
+const detalleProductoGET_ID =  function(req,res) {
+    let id = req.params.id
+
+    let sql = "SELECT * FROM Productos WHERE id = ?"
+    db.query(sql, id, function(err, data) {
+      
+        if (err) res.send(`Ocurrió un error ${err.code}`);
+
+        if (data == "") {
+            res.status(404).render("404", {
+                titulo: "404 - Página no encontrada",
+                mensaje: `Producto con ID ${id} no existe`
+            })
+        } else {
+            res.render('detalle-producto', {
+                producto: data[0] // [0] para poder acceder al 1er obejto del array
+            })
+        }
+    })
+    
 }
 
 const sobreNosotrosGET = function(req,res) {
@@ -80,6 +98,6 @@ module.exports = {
     contactoGET,
     contactoPOST,
     comoComprarGET,
-    detalleProductoGET,
+    detalleProductoGET_ID,
     sobreNosotrosGET
 }
