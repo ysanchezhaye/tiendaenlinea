@@ -37,7 +37,7 @@ const {
     loginGET
 }= require('../controllers/back.ctrl')
 
-router.get('/admin',adminGET )
+router.get('/admin',adminGET ) 
 
 router.get('/agregar-producto', agregarProductoGET)
 router.post('/agregar-producto', agregarProductoPOST)
